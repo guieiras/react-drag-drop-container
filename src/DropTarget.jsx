@@ -58,19 +58,24 @@ class DropTarget extends React.Component {
 
 
   render() {
-    const classNames = 'droptarget ' +  (this.state.highlighted ? this.props.highlightClassName : '');
-    return (
-      <span ref={(t) => { this.elem = t; }} className={classNames}>
-        {this.props.render ? this.props.render() : this.props.children}
-      </span>
+    const classNames = this.props.className + ' ' + (this.state.highlighted ? this.props.highlightClassName : '');
+    return React.createElement(
+      this.props.as,
+      {
+        ref: (t) => { this.elem = t; },
+        className: classNames
+      },
+      this.props.render ? this.props.render() : this.props.children
     );
   }
 }
 
 DropTarget.propTypes = {
+  as: PropTypes.string,
   children: PropTypes.node,
   render: PropTypes.func,
   highlightClassName: PropTypes.string,
+  className: PropTypes.string,
 
   // needs to match the targetKey in the DragDropContainer -- matched via the enter/leave/drop event names, above
   targetKey: PropTypes.string,
@@ -85,7 +90,9 @@ DropTarget.propTypes = {
 };
 
 DropTarget.defaultProps = {
+  as: 'span',
   children: null,
+  className: 'droptarget',
   targetKey: 'ddc',
   onDragEnter: () => {},
   onDragLeave: () => {},
